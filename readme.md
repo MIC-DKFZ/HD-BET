@@ -63,7 +63,7 @@ python run.py --help
 1) **How much GPU memory do I need to run HD-BET?**  
 We ran all our experiments on NVIDIA Titan X GPUs with 12 GB memory. For inference you will need less, but since 
 inference in implemented by exploiting the fully convolutional nature of CNNs the amount of memory required depends on 
-your image. Typical image sshould run with less than 4 GB of GPU memory consumption. If you run into out of memory
+your image. Typical image should run with less than 4 GB of GPU memory consumption. If you run into out of memory
 problems please check the following: 1) Make sure the voxel spacing of your data is correct and 2) Ensure your MRI 
 image only contains the head region
 2) **Will you provide the training code as well?**  
