@@ -1,10 +1,16 @@
 #HD-BET
 
-This repository provides easy to use access to our recently published HD-BET brain extraction tool. HD-BET is he result
-of a joint project between the Department of Neuroradiology of the Heidelberg University Medical Center and the 
-Division of Medical Image Computing of the German Cancer Research Center.
+This repository provides easy to use access to our recently published HD-BET brain extraction tool. HD-BET is the result
+of a joint project between the Department of Neuroradiology at the Heidelberg University Medical Center and the 
+Division of Medical Image Computing at the German Cancer Research Center.
 
-ADVANTAGES OF HD-BET
+Compared to other commonly used brain extraction tools, HD-BET has some significant advantages:
+- HD-BET can run brain extraction on the most commom MRI sequences natively and is not restricted to T1w! It was 
+trained with T1w, T1w with contrast enhancement, T2w and FLAIR sequences. Other MRI sequences may work as well (just 
+give it a try!)
+- it was designed to be robust with respect to brain tumors, lesions and resection cavities
+- it is very fast on GPU with <10s run time per MRI sequence. Even on CPU it is not slower than other commonly 
+used tools
  
 ##Installation Instructions
 
@@ -21,18 +27,20 @@ HD_BET/paths.py and make sure you installed HD_BET with the '-e' option.
 
 
 ## How to use it
-Using HD_BET is quite straightforward. We provide CPU as well as GPU support. Running on GPU is a lot faster though 
+Using HD_BET is straightforward. We provide CPU as well as GPU support. Running on GPU is a lot faster though 
 and should always be preferred. Here is a minimalistic example of how you can use HD-BET (you need to be in the HD_BET 
 directory)
 
 ```bash
 python run.py INPUT_FILENAME OUTPUT_FILENAME
 ```
-INPUT_FILENAME must be a nifti (.nii.gz) file containing 3D image data. 4D image sequences are not supported. 
-All input images must match the orientation of MNI152! Use fslreorient2std <sup>1</sup> to ensure that is the case!
 
-By default, this will run in GPU mode, use the parameters of fold 0 ('0.model'), use test time data augmentation by 
-mirroring along all axes and not do any postprocessing.
+INPUT_FILENAME must be a nifti (.nii.gz) file containing 3D image data. 4D image sequences are not supported. 
+INPUT_FILENAME can be either T1w, T1w with contrast agent, T2w or FLAIR MRI image. Other modalities might work as well.
+Input images must match the orientation of MNI152! Use fslreorient2std <sup>1</sup> to ensure that is the case!
+
+By default, this will run in GPU mode, use the parameters of all five models (which originate from a five-fold 
+cross-validation), use test time data augmentation by mirroring along all axes and not do any postprocessing.
 
 For batch processing it is faster to process an entire folder at once as this will mitigate the overhead of loading 
 and initializing the model for each case:
@@ -41,15 +49,8 @@ and initializing the model for each case:
 python run.py INPUT_FOLDER OUTPUT_FOLDER
 ```
 
-This command will look for all nifti files (*.nii.gz) in the INPUT_FOLDER and save the brain masks under the same name
+The above command will look for all nifti files (*.nii.gz) in the INPUT_FOLDER and save the brain masks under the same name
 in OUTPUT_FOLDER.
-
-**We recommend to run all brain extractions with this command to make use of an ensemble of five models. This will 
-still run very quickly on GPU**
-```bash
-python run.py INPUT_FOLDER OUTPUT_FOLDER -mode accurate
-```
-
 
 To modify the device (CPU/GPU), whether to use test time data augmentation and postprocessing please refer 
 to the documentation of run.py:

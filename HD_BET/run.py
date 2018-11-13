@@ -93,10 +93,11 @@ if __name__ == "__main__":
                                        'within that folder will be brain extracted.', required=True, type=str)
     parser.add_argument('-output', help='output. Can be either a filename or a folder. If it does not exist, the folder'
                                      ' will be created', required=True, type=str)
-    parser.add_argument('-mode', type=str, default='fast', help='can be either \'fast\' or \'accurate\'. Fast will '
+    parser.add_argument('-mode', type=str, default='accurate', help='can be either \'fast\' or \'accurate\'. Fast will '
                                                                 'use only one set of parameters whereas accurate will '
                                                                 'use the five sets of parameters that resulted from '
-                                                                'our cross-validation as an ensemble. Default: fast',
+                                                                'our cross-validation as an ensemble. Default: '
+                                                                    'accurate',
                         required=False)
     parser.add_argument('-device', default='0', type=str, help='used to set on which device the prediction will run. '
                                                                'Must be either int or str. Use int for GPU id or '
@@ -119,8 +120,8 @@ if __name__ == "__main__":
     tta = args.tta
     pp = args.pp
 
-    params_file = "model_final.model"
-    config_file = "config.py"
+    params_file = os.path.join(HD_BET.__path__[0], "model_final.py")
+    config_file = os.path.join(HD_BET.__path__[0], "config.py")
 
     assert os.path.abspath(input_file_or_dir) != os.path.abspath(output_file_or_dir), "output must be different from input"
 
