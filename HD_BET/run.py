@@ -6,14 +6,16 @@ import imp
 from HD_BET.utils import postprocess_prediction, subfiles, maybe_mkdir_p
 import os
 from HD_BET.paths import folder_with_parameter_files
+import HD_BET
 
 
-def run(mri_fnames, output_fnames, list_of_param_files, config_file, device=0, postprocess=False, do_tta=True):
+def run(mri_fnames, output_fnames, mode, config_file=os.path.join(HD_BET.__path__[0], "config.py"), device=0,
+        postprocess=False, do_tta=True):
     """
 
     :param mri_fnames: str or list/tuple of str
     :param output_fnames: str or list/tuple of str. If list: must have the same length as output_fnames
-    :param params_file: str to params_file or list of files
+    :param mode: fast or accurate
     :param config_file: config.py
     :param device: either int (for device id) or 'cpu'
     :param postprocess: whether to do postprocessing or not. Postprocessing here consists of simply discarding all
@@ -22,6 +24,18 @@ def run(mri_fnames, output_fnames, list_of_param_files, config_file, device=0, p
     CPU you may want to turn that off to speed things up
     :return:
     """
+
+    list_of_param_files = []
+    if mode == 'fast':
+        list_of_param_files.append(os.path.join(folder_with_parameter_files, "0.model"))
+    elif mode == 'accurate':
+        for i in range(5):
+            list_of_param_files.append(os.path.join(folder_with_parameter_files, "%d.model" % i))
+    else:
+        raise ValueError("Unknown value for mode: %s. Expected: fast or accurate" % mode)
+    assert all([os.path.isfile(i) for i in list_of_param_files]), "Could not find parameter files. Please refer to " \
+                                                                  "the readme on how to download them"
+
     cf = imp.load_source('cf', config_file)
     cf = cf.config()
 
@@ -130,15 +144,18 @@ if __name__ == "__main__":
         output_files = [output_file_or_dir]
         input_files = [input_file_or_dir]
 
-    list_of_param_files = []
-    if mode == 'fast':
-        list_of_param_files.append(os.path.join(folder_with_parameter_files, "0.model"))
-    elif mode == 'accurate':
-        for i in range(5):
-            list_of_param_files.append(os.path.join(folder_with_parameter_files, "%d.model" % i))
+    if tta == 0:
+        tta = False
+    elif tta == 1:
+        tta = True
     else:
-        raise ValueError("Unknown value for mode: %s. Expected: fast or accurate" % mode)
-    assert all([os.path.isfile(i) for i in list_of_param_files]), "Could not find parameter files. Please refer to " \
-                                                                  "the readme on how to download them"
+        raise ValueError("Unknown value for tta: %s. Expected: 0 or 1" % str(tta))
 
-    run(input_files, output_files, list_of_param_files, config_file, device, pp, tta)
+    if pp == 0:
+        pp = False
+    elif pp == 1:
+        pp = True
+    else:
+        raise ValueError("Unknown value for pp: %s. Expected: 0 or 1" % str(pp))
+
+    run(input_files, output_files, mode, config_file, device, pp, tta)

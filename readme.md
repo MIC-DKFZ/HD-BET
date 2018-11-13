@@ -28,7 +28,8 @@ directory)
 ```bash
 python run.py INPUT_FILENAME OUTPUT_FILENAME
 ```
-INPUT_FILENAME must be a nifti (.nii.gz) file containing 3D image data. 4D image sequences are not supported.
+INPUT_FILENAME must be a nifti (.nii.gz) file containing 3D image data. 4D image sequences are not supported. 
+All input images must match the orientation of MNI152! Use fslreorient2std <sup>1</sup> to ensure that is the case!
 
 By default, this will run in GPU mode, use the parameters of fold 0 ('0.model'), use test time data augmentation by 
 mirroring along all axes and not do any postprocessing.
@@ -69,3 +70,7 @@ No. The training code is tightly wound around the data which we cannot make publ
 3) **What run time can I expect on CPU/GPU?**  
 This depends on your MRI image size. Typical run times (preprocessing, postprocessing and resampling included) are just
  a couple of seconds for GPU and about 2 Minutes on CPU (using ```-tta 0 -mode fast```)
+
+
+
+<sup>1</sup>https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Orientation%20Explained
