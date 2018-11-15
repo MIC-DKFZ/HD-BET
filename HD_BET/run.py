@@ -98,6 +98,9 @@ def run(mri_fnames, output_fnames, mode, config_file=os.path.join(HD_BET.__path_
 
         apply_bet(in_fname, mask_fname, out_fname)
 
+        if not keep_mask:
+            os.remove(mask_fname)
+
 
 if __name__ == "__main__":
     import argparse
