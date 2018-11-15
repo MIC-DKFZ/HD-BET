@@ -1,6 +1,6 @@
 from setuptools import setup
 
-setup(name='HD-BET',
+setup(name='HD_BET',
       version='1.0',
       description='Tool for brain extraction',
       url='',  # TODO

@@ -10,20 +10,15 @@ def resize_image(image, old_spacing, new_spacing, order=3):
     return resize(image, new_shape, order=order, mode='edge', anti_aliasing=False)
 
 
-def preprocess_image(itk_image, is_seg=False, spacing_target=(1, 0.5, 0.5), brain_mask=None):
+def preprocess_image(itk_image, is_seg=False, spacing_target=(1, 0.5, 0.5)):
     spacing = np.array(itk_image.GetSpacing())[[2, 1, 0]]
     image = sitk.GetArrayFromImage(itk_image).astype(float)
     if not is_seg:
-        if brain_mask is None:
-            brain_mask = (image != image[0, 0, 0]).astype(float)
         if np.any([[i != j] for i, j in zip(spacing, spacing_target)]):
             image = resize_image(image, spacing, spacing_target).astype(np.float32)
-            brain_mask = resize_image(brain_mask.astype(float), spacing, spacing_target, order=0).astype(int)
-        image[brain_mask == 0] = 0
 
-        #subtract mean, divide by std. use heuristic masking
-        image[brain_mask != 0] -= image[brain_mask != 0].mean()
-        image[brain_mask != 0] /= image[brain_mask != 0].std()
+        image -= image.mean()
+        image /= image.std()
     else:
         new_shape = (int(np.round(spacing[0] / spacing_target[0] * float(image.shape[0]))),
                      int(np.round(spacing[1] / spacing_target[1] * float(image.shape[1]))),

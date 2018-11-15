@@ -1,5 +1,6 @@
 import torch
 import numpy as np
+import SimpleITK as sitk
 from HD_BET.data_loading import load_and_preprocess, save_segmentation_nifti
 from HD_BET.predict_case import predict_case_3D_net
 import imp
@@ -9,8 +10,18 @@ from HD_BET.paths import folder_with_parameter_files
 import HD_BET
 
 
+def apply_bet(img, bet, out_fname):
+    img_itk = sitk.ReadImage(img)
+    img_npy = sitk.GetArrayFromImage(img_itk)
+    img_bet = sitk.GetArrayFromImage(sitk.ReadImage(bet))
+    img_npy[img_bet == 0] = 0
+    out = sitk.GetImageFromArray(img_npy)
+    out.CopyInformation(img_itk)
+    sitk.WriteImage(out, out_fname)
+
+
 def run(mri_fnames, output_fnames, mode, config_file=os.path.join(HD_BET.__path__[0], "config.py"), device=0,
-        postprocess=False, do_tta=True):
+        postprocess=False, do_tta=True, keep_mask=False):
     """
 
     :param mri_fnames: str or list/tuple of str
@@ -64,6 +75,8 @@ def run(mri_fnames, output_fnames, mode, config_file=os.path.join(HD_BET.__path_
 
         softmax_preds = []
 
+        mask_fname = out_fname[:-7] + "_mask.nii.gz"
+
         print("prediction (CNN id)...")
         for i, p in enumerate(params):
             print(i)
@@ -81,7 +94,9 @@ def run(mri_fnames, output_fnames, mode, config_file=os.path.join(HD_BET.__path_
             seg = postprocess_prediction(seg)
 
         print("exporting segmentation...")
-        save_segmentation_nifti(seg, data_dict, out_fname)
+        save_segmentation_nifti(seg, data_dict, mask_fname)
+
+        apply_bet(in_fname, mask_fname, out_fname)
 
 
 if __name__ == "__main__":
@@ -110,6 +125,8 @@ if __name__ == "__main__":
     parser.add_argument('-pp', default=0, type=int, required=False, help='set to 1 to enable postprocessing (remove all'
                                                                          ' but the largest connected component in '
                                                                          'the prediction. Default: 0')
+    parser.add_argument('-s', '--save_mask', default=0, type=int, required=False, help='if set to 1 the mask will be '
+                                                                                       'saved as well')
 
     args = parser.parse_args()
 
@@ -119,6 +136,7 @@ if __name__ == "__main__":
     device = args.device
     tta = args.tta
     pp = args.pp
+    save_mask = args.save_mask
 
     params_file = os.path.join(HD_BET.__path__[0], "model_final.py")
     config_file = os.path.join(HD_BET.__path__[0], "config.py")
@@ -159,4 +177,11 @@ if __name__ == "__main__":
     else:
         raise ValueError("Unknown value for pp: %s. Expected: 0 or 1" % str(pp))
 
-    run(input_files, output_files, mode, config_file, device, pp, tta)
+    if save_mask == 0:
+        save_mask = False
+    elif save_mask == 1:
+        save_mask = True
+    else:
+        raise ValueError("Unknown value for pp: %s. Expected: 0 or 1" % str(pp))
+
+    run(input_files, output_files, mode, config_file, device, pp, tta, save_mask)
