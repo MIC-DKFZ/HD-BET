@@ -72,7 +72,9 @@ class HD_BET_Config(BaseConfig):
         self.val_min_size = self.INPUT_PATCH_SIZE
         self.val_fn = None
 
-        # CAREFUL! THIS IS A HACK TO MAKE PYTORCH 0.3 STATE DICTS COMPATIBLE WITH PYTORCH 0.4
+        # CAREFUL! THIS IS A HACK TO MAKE PYTORCH 0.3 STATE DICTS COMPATIBLE WITH PYTORCH 0.4 (setting keep_runnings_
+        # stats=True but not using them in validation. keep_runnings_stats was True before 0.3 but unused and defaults
+        # to false in 0.4)
         self.val_use_moving_averages = False
 
     def get_network(self, train=True, pretrained_weights=None):

@@ -102,7 +102,8 @@ class Network(nn.Module):
     def __init__(self, num_classes=4, num_input_channels=4, base_filters=16, dropout_p=0.3,
                  final_nonlin=softmax_helper, leakiness=1e-2, conv_bias=True, inst_norm_affine=True,
                  lrelu_inplace=True, do_ds=True):
-        nn.Module.__init__(self)
+        super(Network, self).__init__()
+
         self.do_ds = do_ds
         self.lrelu_inplace = lrelu_inplace
         self.inst_norm_affine = inst_norm_affine

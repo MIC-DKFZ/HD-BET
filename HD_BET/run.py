@@ -20,8 +20,8 @@ def apply_bet(img, bet, out_fname):
     sitk.WriteImage(out, out_fname)
 
 
-def run(mri_fnames, output_fnames, mode, config_file=os.path.join(HD_BET.__path__[0], "config.py"), device=0,
-        postprocess=False, do_tta=True, keep_mask=False):
+def run(mri_fnames, output_fnames, mode="accurate", config_file=os.path.join(HD_BET.__path__[0], "config.py"), device=0,
+        postprocess=False, do_tta=True, keep_mask=True):
     """
 
     :param mri_fnames: str or list/tuple of str
@@ -81,7 +81,11 @@ def run(mri_fnames, output_fnames, mode, config_file=os.path.join(HD_BET.__path_
         for i, p in enumerate(params):
             print(i)
             net.load_state_dict(p)
+            """assert isinstance(net, SegmentationNetwork)
 
+            _, _, softmax_pred, _ = net.predict_3D(cf.preprocess(data), do_tta, cf.val_num_repeats, False, cf.val_batch_size,
+                                                   (0, 1, 2), True, True, 2, cf.val_min_size, None, True,
+                                                   'constant', {'constant_values': 0})"""
             _, _, softmax_pred, _ = predict_case_3D_net(net, cf.preprocess(data), do_tta, cf.val_num_repeats,
                                                         cf.val_batch_size, cf.net_input_must_be_divisible_by,
                                                         cf.val_min_size, device, cf.da_mirror_axes)

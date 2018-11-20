@@ -1,5 +1,6 @@
 import torch
 import numpy as np
+from batchgenerators.augmentations.utils import pad_nd_image
 
 
 def pad_patient_3D(patient, shape_must_be_divisible_by=16, min_size=None):
@@ -110,12 +111,9 @@ def reshape_by_padding_upper_coords_batched(image, new_shape, pad_value=None):
 
 def predict_case_3D_net(net, patient_data, do_mirroring, num_repeats, BATCH_SIZE=None, new_shape_must_be_divisible_by=16, min_size=None, main_device=0, mirror_axes=(2, 3, 4)):
     with torch.no_grad():
-        pad_res = []
-        for i in range(patient_data.shape[0]):
-            t, old_shape = pad_patient_3D(patient_data[i], new_shape_must_be_divisible_by, min_size)
-            pad_res.append(t[None])
-
-        patient_data = np.vstack(pad_res)
+        min_size_here = [max(patient_data.shape[1:][i], min_size[i]) for i in range(len(min_size))]
+        patient_data, sl = pad_nd_image(patient_data, min_size_here, mode='constant', kwargs={'constant_values': 0},
+                                        return_slicer=True, shape_must_be_divisible_by=new_shape_must_be_divisible_by)
 
         new_shp = patient_data.shape
 
@@ -187,7 +185,11 @@ def predict_case_3D_net(net, patient_data, do_mirroring, num_repeats, BATCH_SIZE
                         p = p[:, :, ::-1, ::-1, ::-1]
                     all_preds.append(p)
 
-        stacked = np.vstack(all_preds)[:, :, :old_shape[0], :old_shape[1], :old_shape[2]]
+        stacked = np.vstack(all_preds)
+
+        slicer = tuple([slice(0, stacked.shape[i]) for i in range(len(stacked.shape) - (len(sl) - 1))] + sl[1:])
+        stacked = stacked[slicer]
+
         predicted_segmentation = stacked.mean(0).argmax(0)
         uncertainty = stacked.var(0)
         bayesian_predictions = stacked
