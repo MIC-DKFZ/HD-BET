@@ -15,7 +15,7 @@ used tools
 ##Installation Instructions
 
 1) Clone this repository
-2) Go into the HD_BET directory and install with
+2) Go into the repository (the folder with the setup.py file) and install with
     ```
     pip install -e .
     ```
@@ -24,7 +24,8 @@ HD_BET/paths.py in a text editor and modify ```folder_with_parameter_files```
 
 
 ## How to use it
-Using HD_BET is straightforward. We provide CPU as well as GPU support. Running on GPU is a lot faster though 
+Using HD_BET is straightforward. You can use it in any terminal on your linux system. The hd-bet command was installed 
+automatically. We provide CPU as well as GPU support. Running on GPU is a lot faster though 
 and should always be preferred. Here is a minimalistic example of how you can use HD-BET (you need to be in the HD_BET 
 directory)
 

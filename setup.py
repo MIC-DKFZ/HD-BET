@@ -3,11 +3,11 @@ from setuptools import setup
 setup(name='HD_BET',
       version='1.0',
       description='Tool for brain extraction',
-      url='',  # TODO,
+      url='https://github.com/MIC-DKFZ/hd-bet',
       python_requires='>=3.5',
       author='Fabian Isensee',
       author_email='f.isensee@dkfz.de',
-      license='MIT',  # TODO
+      license='Apache 2.0',
       zip_safe=False,
       install_requires=[
       'numpy',
