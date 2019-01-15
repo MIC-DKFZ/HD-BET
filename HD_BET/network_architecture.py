@@ -32,7 +32,7 @@ class EncodingModule(nn.Module):
 
 
 class Upsample(nn.Module):
-    def __init__(self, size=None, scale_factor=None, mode='nearest', align_corners=False):
+    def __init__(self, size=None, scale_factor=None, mode='nearest', align_corners=True):
         super(Upsample, self).__init__()
         self.align_corners = align_corners
         self.mode = mode
@@ -71,7 +71,7 @@ class UpsamplingModule(nn.Module):
         self.inst_norm_affine = inst_norm_affine
         self.conv_bias = conv_bias
         self.leakiness = leakiness
-        self.upsample = Upsample(scale_factor=2, mode="trilinear")
+        self.upsample = Upsample(scale_factor=2, mode="trilinear", align_corners=True)
         self.upsample_conv = nn.Conv3d(in_channels, out_channels, 3, 1, 1, bias=self.conv_bias)
         self.bn = nn.InstanceNorm3d(out_channels, affine=self.inst_norm_affine, track_running_stats=True)
 

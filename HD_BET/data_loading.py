@@ -7,12 +7,15 @@ def resize_image(image, old_spacing, new_spacing, order=3):
     new_shape = (int(np.round(old_spacing[0]/new_spacing[0]*float(image.shape[0]))),
                  int(np.round(old_spacing[1]/new_spacing[1]*float(image.shape[1]))),
                  int(np.round(old_spacing[2]/new_spacing[2]*float(image.shape[2]))))
-    return resize(image, new_shape, order=order, mode='edge', anti_aliasing=False)
+    return resize(image, new_shape, order=order, mode='edge', cval=0, anti_aliasing=False)
 
 
 def preprocess_image(itk_image, is_seg=False, spacing_target=(1, 0.5, 0.5)):
     spacing = np.array(itk_image.GetSpacing())[[2, 1, 0]]
     image = sitk.GetArrayFromImage(itk_image).astype(float)
+
+    assert len(image.shape) == 3, "The image has unsupported number of dimensions. Only 3D images are allowed"
+
     if not is_seg:
         if np.any([[i != j] for i, j in zip(spacing, spacing_target)]):
             image = resize_image(image, spacing, spacing_target).astype(np.float32)
@@ -51,16 +54,25 @@ def load_and_preprocess(mri_file):
     return all_data, properties_dict
 
 
-def save_segmentation_nifti(segmentation, dct, out_fname):
+def save_segmentation_nifti(segmentation, dct, out_fname, order=1):
     '''
     segmentation must have the same spacing as the original nifti (for now). segmentation may have been cropped out
     of the original image
+
+    dct:
+    size_before_cropping
+    brain_bbox
+    size -> this is the original size of the dataset, if the image was not resampled, this is the same as size_before_cropping
+    spacing
+    origin
+    direction
+
     :param segmentation:
     :param dct:
     :param out_fname:
     :return:
     '''
-    old_size = np.array(dct['size_before_cropping'])
+    old_size = dct.get('size_before_cropping')
     bbox = dct.get('brain_bbox')
     if bbox is not None:
         seg_old_size = np.zeros(old_size)
@@ -71,9 +83,11 @@ def save_segmentation_nifti(segmentation, dct, out_fname):
                      bbox[2][0]:bbox[2][1]] = segmentation
     else:
         seg_old_size = segmentation
-
-    seg_old_spacing = resize_segmentation(seg_old_size, np.array(dct['size'])[[2, 1, 0]], order=1)
-    seg_resized_itk = sitk.GetImageFromArray(seg_old_spacing.astype(np.uint8))
+    if np.any(np.array(seg_old_size) != np.array(dct['size'])[[2, 1, 0]]):
+        seg_old_spacing = resize_segmentation(seg_old_size, np.array(dct['size'])[[2, 1, 0]], order=order)
+    else:
+        seg_old_spacing = seg_old_size
+    seg_resized_itk = sitk.GetImageFromArray(seg_old_spacing.astype(np.int32))
     seg_resized_itk.SetSpacing(np.array(dct['spacing'])[[0, 1, 2]])
     seg_resized_itk.SetOrigin(dct['origin'])
     seg_resized_itk.SetDirection(dct['direction'])
@@ -101,6 +115,6 @@ def resize_segmentation(segmentation, new_shape, order=3, cval=0):
         reshaped = np.zeros(new_shape, dtype=segmentation.dtype)
 
         for i, c in enumerate(unique_labels):
-            reshaped_multihot = resize((segmentation == c).astype(float), new_shape, order, mode="constant", cval=cval, clip=True, anti_aliasing=False)
+            reshaped_multihot = resize((segmentation == c).astype(float), new_shape, order, mode="edge", clip=True, anti_aliasing=False)
             reshaped[reshaped_multihot >= 0.5] = c
         return reshaped

@@ -1,8 +1,41 @@
+from urllib.request import urlopen
+
 import torch
 from torch import nn
 import numpy as np
 from skimage.morphology import label
 import os
+from HD_BET.paths import folder_with_parameter_files
+
+
+def get_params_fname(fold):
+    return os.path.join(folder_with_parameter_files, "%d.model" % fold)
+
+
+def maybe_download_parameters(fold=0, force_overwrite=False):
+    """
+    Downloads the parameters for some fold if it is not present yet.
+    :param fold:
+    :param force_overwrite: if True the old parameter file will be deleted (if present) prior to download
+    :return:
+    """
+
+    assert 0 <= fold <= 4, "fold must be between 0 and 4"
+
+    if not os.path.isdir(folder_with_parameter_files):
+        maybe_mkdir_p(folder_with_parameter_files)
+
+    out_filename = get_params_fname(fold)
+
+    if force_overwrite and os.path.isfile(out_filename):
+        os.remove(out_filename)
+
+    if not os.path.isfile(out_filename):
+        url = "https://www.dropbox.com/s/yyew2ujbaicx7s6/%d.model?dl=1" % fold
+        print("Downloading", url, "...")
+        data = urlopen(url).read()
+        with open(out_filename, 'wb') as f:
+            f.write(data)
 
 
 def init_weights(module):

@@ -7,12 +7,12 @@ import HD_BET
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('-input', help='input. Can be either a single file name or an input folder. If file: must be '
+    parser.add_argument('-i', '--input', help='input. Can be either a single file name or an input folder. If file: must be '
                                        'nifti (.nii.gz) and can only be 3D. No support for 4d images, use fslsplit to '
                                        'split 4d sequences into 3d images. If folder: all files ending with .nii.gz '
                                        'within that folder will be brain extracted.', required=True, type=str)
-    parser.add_argument('-output', help='output. Can be either a filename or a folder. If it does not exist, the folder'
-                                     ' will be created', required=True, type=str)
+    parser.add_argument('-o', '--output', help='output. Can be either a filename or a folder. If it does not exist, the folder'
+                                     ' will be created', required=False, type=str)
     parser.add_argument('-mode', type=str, default='accurate', help='can be either \'fast\' or \'accurate\'. Fast will '
                                                                 'use only one set of parameters whereas accurate will '
                                                                 'use the five sets of parameters that resulted from '
@@ -37,6 +37,10 @@ if __name__ == "__main__":
 
     input_file_or_dir = args.input
     output_file_or_dir = args.output
+
+    if output_file_or_dir is None:
+        output_file_or_dir = input_file_or_dir + "_bet"
+
     mode = args.mode
     device = args.device
     tta = args.tta
@@ -65,6 +69,8 @@ if __name__ == "__main__":
     else:
         if not output_file_or_dir.endswith('.nii.gz'):
             output_file_or_dir += '.nii.gz'
+            assert os.path.abspath(input_file_or_dir) != os.path.abspath(output_file_or_dir), "output must be different from input"
+
         output_files = [output_file_or_dir]
         input_files = [input_file_or_dir]
 

@@ -4,9 +4,8 @@ import SimpleITK as sitk
 from HD_BET.data_loading import load_and_preprocess, save_segmentation_nifti
 from HD_BET.predict_case import predict_case_3D_net
 import imp
-from HD_BET.utils import postprocess_prediction, subfiles, maybe_mkdir_p
+from HD_BET.utils import postprocess_prediction, SetNetworkToVal, get_params_fname, maybe_download_parameters
 import os
-from HD_BET.paths import folder_with_parameter_files
 import HD_BET
 
 
@@ -37,15 +36,22 @@ def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.j
     """
 
     list_of_param_files = []
+
     if mode == 'fast':
-        list_of_param_files.append(os.path.join(folder_with_parameter_files, "0.model"))
+        params_file = get_params_fname(0)
+        maybe_download_parameters(0)
+
+        list_of_param_files.append(params_file)
     elif mode == 'accurate':
         for i in range(5):
-            list_of_param_files.append(os.path.join(folder_with_parameter_files, "%d.model" % i))
+            params_file = get_params_fname(i)
+            maybe_download_parameters(i)
+
+            list_of_param_files.append(params_file)
     else:
         raise ValueError("Unknown value for mode: %s. Expected: fast or accurate" % mode)
-    assert all([os.path.isfile(i) for i in list_of_param_files]), "Could not find parameter files. Please refer to " \
-                                                                  "the readme on how to download them"
+
+    assert all([os.path.isfile(i) for i in list_of_param_files]), "Could not find parameter files"
 
     cf = imp.load_source('cf', config_file)
     cf = cf.config()
@@ -69,40 +75,44 @@ def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.j
         params.append(torch.load(p, map_location=lambda storage, loc: storage))
 
     for in_fname, out_fname in zip(mri_fnames, output_fnames):
-        print("File:", in_fname)
-        print("preprocessing...")
-        data, data_dict = load_and_preprocess(in_fname)
-
-        softmax_preds = []
-
         mask_fname = out_fname[:-7] + "_mask.nii.gz"
+        if not (os.path.isfile(mask_fname) and keep_mask) or not os.path.isfile(out_fname):
+            print("File:", in_fname)
+            print("preprocessing...")
+            try:
+                data, data_dict = load_and_preprocess(in_fname)
+            except RuntimeError:
+                print("\nERROR\nCould not read file", in_fname, "\n")
+                continue
+            except AssertionError as e:
+                print(e)
+                continue
 
-        print("prediction (CNN id)...")
-        for i, p in enumerate(params):
-            print(i)
-            net.load_state_dict(p)
-            """assert isinstance(net, SegmentationNetwork)
+            softmax_preds = []
 
-            _, _, softmax_pred, _ = net.predict_3D(cf.preprocess(data), do_tta, cf.val_num_repeats, False, cf.val_batch_size,
-                                                   (0, 1, 2), True, True, 2, cf.val_min_size, None, True,
-                                                   'constant', {'constant_values': 0})"""
-            _, _, softmax_pred, _ = predict_case_3D_net(net, cf.preprocess(data), do_tta, cf.val_num_repeats,
-                                                        cf.val_batch_size, cf.net_input_must_be_divisible_by,
-                                                        cf.val_min_size, device, cf.da_mirror_axes)
-            softmax_preds.append(softmax_pred[None])
+            print("prediction (CNN id)...")
+            for i, p in enumerate(params):
+                print(i)
+                net.load_state_dict(p)
+                net.eval()
+                net.apply(SetNetworkToVal(False, False))
+                _, _, softmax_pred, _ = predict_case_3D_net(net, data, do_tta, cf.val_num_repeats,
+                                                            cf.val_batch_size, cf.net_input_must_be_divisible_by,
+                                                            cf.val_min_size, device, cf.da_mirror_axes)
+                softmax_preds.append(softmax_pred[None])
 
-        seg = np.argmax(np.vstack(softmax_preds).mean(0), 0)
+            seg = np.argmax(np.vstack(softmax_preds).mean(0), 0)
 
-        if postprocess:
-            print("postprocessing ...")
-            seg = postprocess_prediction(seg)
+            if postprocess:
+                print("postprocessing ...")
+                seg = postprocess_prediction(seg)
 
-        print("exporting segmentation...")
-        save_segmentation_nifti(seg, data_dict, mask_fname)
+            print("exporting segmentation...")
+            save_segmentation_nifti(seg, data_dict, mask_fname)
 
-        apply_bet(in_fname, mask_fname, out_fname)
+            apply_bet(in_fname, mask_fname, out_fname)
 
-        if not keep_mask:
-            os.remove(mask_fname)
+            if not keep_mask:
+                os.remove(mask_fname)
 
 
