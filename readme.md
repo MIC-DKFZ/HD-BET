@@ -19,11 +19,8 @@ used tools
     ```
     pip install -e .
     ```
-3) Download the model parameters from 
-https://www.dropbox.com/s/xsm95642suvq7n0/HD-BET_parameters.zip?dl=0
-4) Extract the model parameters to HD_BET/parameters/0.model etc.  
-If you wish to save them in a different folder you can do so. In that case please modify the path to the parameters in 
-HD_BET/paths.py and make sure you installed HD_BET with the '-e' option.
+3) Per default, model parameters will be downloaded to ~/.hd-bet_params. If you wish to use a different folder, open 
+HD_BET/paths.py in a text editor and modify ```folder_with_parameter_files```
 
 
 ## How to use it
@@ -32,7 +29,7 @@ and should always be preferred. Here is a minimalistic example of how you can us
 directory)
 
 ```bash
-python run.py INPUT_FILENAME OUTPUT_FILENAME
+hd-bet -i INPUT_FILENAME
 ```
 
 INPUT_FILENAME must be a nifti (.nii.gz) file containing 3D image data. 4D image sequences are not supported. 
@@ -46,7 +43,7 @@ For batch processing it is faster to process an entire folder at once as this wi
 and initializing the model for each case:
 
 ```bash
-python run.py INPUT_FOLDER OUTPUT_FOLDER
+hd-bet -i INPUT_FOLDER -o OUTPUT_FOLDER
 ```
 
 The above command will look for all nifti files (*.nii.gz) in the INPUT_FOLDER and save the brain masks under the same name
@@ -56,7 +53,7 @@ To modify the device (CPU/GPU), whether to use test time data augmentation and p
 to the documentation of run.py:
 
 ```bash
-python run.py --help
+hd-bet --help
 ```
 
 ## FAQ
