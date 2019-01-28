@@ -1,6 +1,5 @@
 import torch
 import numpy as np
-from torch.autograd import Variable
 
 
 def pad_patient_3D(patient, shape_must_be_divisible_by=16, min_size=None):
@@ -55,7 +54,12 @@ def predict_case_3D_net(net, patient_data, do_mirroring, num_repeats, BATCH_SIZE
         if BATCH_SIZE is not None:
             data = np.vstack([data] * BATCH_SIZE)
 
-        a = Variable(torch.rand(data.shape)).float().cuda(main_device)
+        a = torch.rand(data.shape).float()
+
+        if main_device == 'cpu':
+            pass
+        else:
+            a = a.cuda(main_device)
 
         if do_mirroring:
             x = 8
