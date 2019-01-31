@@ -1,5 +1,5 @@
-#HD-BET
 
+#HD-BET
 This repository provides easy to use access to our recently published HD-BET brain extraction tool. HD-BET is the result
 of a joint project between the Department of Neuroradiology at the Heidelberg University Medical Center and the 
 Division of Medical Image Computing at the German Cancer Research Center.
@@ -15,8 +15,8 @@ give it a try!)
 - it is very fast on GPU with <10s run time per MRI sequence. Even on CPU it is not slower than other commonly 
 used tools
  
+ 
 ##Installation Instructions
-
 1) Clone this repository
 2) Go into the repository (the folder with the setup.py file) and install with
     ```
