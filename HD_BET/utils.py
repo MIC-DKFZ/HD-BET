@@ -30,7 +30,7 @@ def maybe_download_parameters(fold=0, force_overwrite=False):
         os.remove(out_filename)
 
     if not os.path.isfile(out_filename):
-        url = "https://www.dropbox.com/s/yyew2ujbaicx7s6/%d.model?dl=1" % fold
+        url = "https://zenodo.org/record/2540695/files/%d.model?download=1" % fold
         print("Downloading", url, "...")
         data = urlopen(url).read()
         with open(out_filename, 'wb') as f:
