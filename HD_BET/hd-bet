@@ -28,11 +28,15 @@ if __name__ == "__main__":
                                                                           '(mirroring). 1= True, 0=False. Disable this '
                                                                           'if you are using CPU to speed things up! '
                                                                           'Default: 1')
-    parser.add_argument('-pp', default=0, type=int, required=False, help='set to 1 to enable postprocessing (remove all'
+    parser.add_argument('-pp', default=1, type=int, required=False, help='set to 0 to disabe postprocessing (remove all'
                                                                          ' but the largest connected component in '
-                                                                         'the prediction. Default: 0')
-    parser.add_argument('-s', '--save_mask', default=0, type=int, required=False, help='if set to 1 the mask will be '
-                                                                                       'saved as well')
+                                                                         'the prediction. Default: 1')
+    parser.add_argument('-s', '--save_mask', default=1, type=int, required=False, help='if set to 0 the segmentation '
+                                                                                       'mask will not be '
+                                                                                       'saved')
+    parser.add_argument('--overwrite_existing', default=1, type=int, required=False, help="set this to 0 if you don't "
+                                                                                          "want to overwrite existing "
+                                                                                          "predictions")
 
     args = parser.parse_args()
 
@@ -40,13 +44,15 @@ if __name__ == "__main__":
     output_file_or_dir = args.output
 
     if output_file_or_dir is None:
-        output_file_or_dir = input_file_or_dir + "_bet"
+        output_file_or_dir = os.path.join(os.path.dirname(input_file_or_dir),
+                                          os.path.basename(input_file_or_dir).split(".")[0] + "_bet")
 
     mode = args.mode
     device = args.device
     tta = args.tta
     pp = args.pp
     save_mask = args.save_mask
+    overwrite_existing = args.overwrite_existing
 
     params_file = os.path.join(HD_BET.__path__[0], "model_final.py")
     config_file = os.path.join(HD_BET.__path__[0], "config.py")
@@ -82,6 +88,13 @@ if __name__ == "__main__":
     else:
         raise ValueError("Unknown value for tta: %s. Expected: 0 or 1" % str(tta))
 
+    if overwrite_existing == 0:
+        overwrite_existing = False
+    elif overwrite_existing == 1:
+        overwrite_existing = True
+    else:
+        raise ValueError("Unknown value for overwrite_existing: %s. Expected: 0 or 1" % str(overwrite_existing))
+
     if pp == 0:
         pp = False
     elif pp == 1:
@@ -96,4 +109,4 @@ if __name__ == "__main__":
     else:
         raise ValueError("Unknown value for pp: %s. Expected: 0 or 1" % str(pp))
 
-    run_hd_bet(input_files, output_files, mode, config_file, device, pp, tta, save_mask)
+    run_hd_bet(input_files, output_files, mode, config_file, device, pp, tta, save_mask, overwrite_existing)

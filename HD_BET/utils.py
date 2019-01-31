@@ -1,5 +1,4 @@
 from urllib.request import urlopen
-
 import torch
 from torch import nn
 import numpy as np
@@ -70,6 +69,7 @@ class SetNetworkToVal(object):
 
 def postprocess_prediction(seg):
     # basically look for connected components and choose the largest one, delete everything else
+    print("running postprocessing... ")
     mask = seg != 0
     lbls = label(mask, 8)
     lbls_sizes = [np.sum(lbls == i) for i in np.unique(lbls)]

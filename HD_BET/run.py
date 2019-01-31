@@ -20,7 +20,7 @@ def apply_bet(img, bet, out_fname):
 
 
 def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.join(HD_BET.__path__[0], "config.py"), device=0,
-               postprocess=False, do_tta=True, keep_mask=True):
+               postprocess=False, do_tta=True, keep_mask=True, overwrite=True):
     """
 
     :param mri_fnames: str or list/tuple of str
@@ -76,7 +76,7 @@ def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.j
 
     for in_fname, out_fname in zip(mri_fnames, output_fnames):
         mask_fname = out_fname[:-7] + "_mask.nii.gz"
-        if not (os.path.isfile(mask_fname) and keep_mask) or not os.path.isfile(out_fname):
+        if overwrite or (not (os.path.isfile(mask_fname) and keep_mask) or not os.path.isfile(out_fname)):
             print("File:", in_fname)
             print("preprocessing...")
             try:
@@ -104,7 +104,6 @@ def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.j
             seg = np.argmax(np.vstack(softmax_preds).mean(0), 0)
 
             if postprocess:
-                print("postprocessing ...")
                 seg = postprocess_prediction(seg)
 
             print("exporting segmentation...")

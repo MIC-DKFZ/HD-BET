@@ -51,6 +51,7 @@ def load_and_preprocess(mri_file):
     for seq in ['T1']:
         imgs.append(images[seq][None])
     all_data = np.vstack(imgs)
+    print("image shape after preprocessing: ", str(all_data[0].shape))
     return all_data, properties_dict
 
 
