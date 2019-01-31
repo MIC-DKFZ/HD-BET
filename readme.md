@@ -1,5 +1,5 @@
-
 #HD-BET
+
 This repository provides easy to use access to our recently published HD-BET brain extraction tool. HD-BET is the result
 of a joint project between the Department of Neuroradiology at the Heidelberg University Medical Center and the 
 Division of Medical Image Computing at the German Cancer Research Center.
@@ -14,9 +14,9 @@ give it a try!)
 - it was designed to be robust with respect to brain tumors, lesions and resection cavities
 - it is very fast on GPU with <10s run time per MRI sequence. Even on CPU it is not slower than other commonly 
 used tools
- 
- 
+
 ##Installation Instructions
+
 1) Clone this repository
 2) Go into the repository (the folder with the setup.py file) and install with
     ```
@@ -27,6 +27,7 @@ HD_BET/paths.py in a text editor and modify ```folder_with_parameter_files```
 
 
 ## How to use it
+
 Using HD_BET is straightforward. You can use it in any terminal on your linux system. The hd-bet command was installed 
 automatically. We provide CPU as well as GPU support. Running on GPU is a lot faster though 
 and should always be preferred. Here is a minimalistic example of how you can use HD-BET (you need to be in the HD_BET 
@@ -61,6 +62,7 @@ hd-bet --help
 ```
 
 ## FAQ
+
 1) **How much GPU memory do I need to run HD-BET?**  
 We ran all our experiments on NVIDIA Titan X GPUs with 12 GB memory. For inference you will need less, but since 
 inference in implemented by exploiting the fully convolutional nature of CNNs the amount of memory required depends on 
