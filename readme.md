@@ -4,6 +4,9 @@ This repository provides easy to use access to our recently published HD-BET bra
 of a joint project between the Department of Neuroradiology at the Heidelberg University Medical Center and the 
 Division of Medical Image Computing at the German Cancer Research Center.
 
+If you are using HD-BET, please cite the following publication: 
+(Citation will appear tomorrow, as we are uploading to arxiv today...)
+
 Compared to other commonly used brain extraction tools, HD-BET has some significant advantages:
 - HD-BET can run brain extraction on the most commom MRI sequences natively and is not restricted to T1w! It was 
 trained with T1w, T1w with contrast enhancement, T2w and FLAIR sequences. Other MRI sequences may work as well (just 

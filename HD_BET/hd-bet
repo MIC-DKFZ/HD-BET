@@ -5,6 +5,11 @@ import HD_BET
 
 
 if __name__ == "__main__":
+    print("\n########################")
+    print("If you are using hd-bet, please cite the following paper:")
+    print("TODO uploading to arxiv today...")
+    print("########################\n")
+
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input', help='input. Can be either a single file name or an input folder. If file: must be '
