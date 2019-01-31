@@ -8,7 +8,7 @@ If you are using HD-BET, please cite the following publication:
 (Citation will appear tomorrow, as we are uploading to arxiv today...)
 
 Compared to other commonly used brain extraction tools, HD-BET has some significant advantages:
-- HD-BET can run brain extraction on the most commom MRI sequences natively and is not restricted to T1w! It was 
+- HD-BET can run brain extraction on the most common MRI sequences natively and is not restricted to T1w! It was 
 trained with T1w, T1w with contrast enhancement, T2w and FLAIR sequences. Other MRI sequences may work as well (just 
 give it a try!)
 - it was designed to be robust with respect to brain tumors, lesions and resection cavities
@@ -54,8 +54,21 @@ hd-bet -i INPUT_FOLDER -o OUTPUT_FOLDER
 The above command will look for all nifti files (*.nii.gz) in the INPUT_FOLDER and save the brain masks under the same name
 in OUTPUT_FOLDER.
 
-To modify the device (CPU/GPU), whether to use test time data augmentation and postprocessing please refer 
-to the documentation of run.py:
+### GPU is nice, but I don't have one of those... What now? 
+
+HD-BET has CPU support. Running on CPU takes a lot longer though and you will need quite a bit of RAM. To run on CPU, 
+we recommend you use the following command:
+
+```bash
+hd-bet -i INPUT_FOLDER -o OUTPUT_FOLDER -device cpu -mode fast -tta 0
+```
+(this works of course also with just an input file)
+
+This will disable test time data augmentation (speedup of 8x) and use only one model instead of an ensemble of five models 
+for the prediction.
+
+### More options:
+For more information, please refer to the help functionality:
 
 ```bash
 hd-bet --help
