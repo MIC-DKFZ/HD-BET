@@ -1,25 +1,33 @@
 # HD-BET 
 
 This repository provides easy to use access to our recently published HD-BET brain extraction tool. HD-BET is the result
-of a joint project between the Department of Neuroradiology at the Heidelberg University Medical Center and the 
-Division of Medical Image Computing at the German Cancer Research Center.
+of a joint project between the Department of Neuroradiology at the Heidelberg University Hospital and the 
+Division of Medical Image Computing at the German Cancer Research Center (DKFZ).
 
 If you are using HD-BET, please cite the following publication: 
-(Citation will appear tomorrow, as we are uploading to arxiv today...)
+
+Isensee F, Schell M, Tursunova I, Brugnara G, Bonekamp D, Neuberger U, Wick A, Schlemmer HP, Heiland S, Wick W, 
+Bendszus M, Maier-Hein KH, Kickingereder P. *Automated brain extraction of multi-sequence MRI using artificial 
+neural networks*. arXiv preprint arXiv:1901.11341, 2019.
 
 Compared to other commonly used brain extraction tools, HD-BET has some significant advantages:
-- HD-BET can run brain extraction on the most common MRI sequences natively and is not restricted to T1w! It was 
-trained with T1w, T1w with contrast enhancement, T2w and FLAIR sequences. Other MRI sequences may work as well (just 
+- HD-BET can run independent brain extraction various different MRI sequences and is not restricted to precontrast 
+T1-weighted (T1-w) sequences! It was 
+trained with precontrast T1-w, postcontrast T1-w, T2-w and FLAIR sequences. Other MRI sequences may work as well (just 
 give it a try!)
-- it was designed to be robust with respect to brain tumors, lesions and resection cavities
-- it is very fast on GPU with <10s run time per MRI sequence. Even on CPU it is not slower than other commonly 
-used tools
+- It was designed to be robust with respect to brain tumors, lesions and resection cavities as well as different MRI scanner hardware and acquisition parameters.
+- It is very fast on GPU with <10s run time per MRI sequence. Even on CPU it is not slower than other commonly 
+used tools.
 
 ## Installation Instructions 
 
-1) Clone this repository
-2) Go into the repository (the folder with the setup.py file) and install with
+1) Clone this repository:
+    ```bash
+    git clone https://github.com/MIC-DKFZ/HD-BET
     ```
+2) Go into the repository (the folder with the setup.py file) and install:
+    ```
+    cd HD-BET
     pip install -e .
     ```
 3) Per default, model parameters will be downloaded to ~/.hd-bet_params. If you wish to use a different folder, open 
@@ -37,11 +45,13 @@ directory)
 hd-bet -i INPUT_FILENAME
 ```
 
-INPUT_FILENAME must be a nifti (.nii.gz) file containing 3D image data. 4D image sequences are not supported. 
-INPUT_FILENAME can be either T1w, T1w with contrast agent, T2w or FLAIR MRI image. Other modalities might work as well.
-Input images must match the orientation of MNI152! Use fslreorient2std <sup>1</sup> to ensure that is the case!
+INPUT_FILENAME must be a nifti (.nii.gz) file containing 3D MRI image data. 4D image sequences are not supported 
+(however can be splitted upfront into the individual temporal volumes using fslsplit<sup>1</sup>). 
+INPUT_FILENAME can be either a pre- or postcontrast T1-w, T2-w or FLAIR MRI sequence. Other modalities might work as well.
+Input images must match the orientation of standard MNI152 template! Use fslreorient2std <sup>2</sup> upfront to ensure 
+that this is the case.
 
-By default, this will run in GPU mode, use the parameters of all five models (which originate from a five-fold 
+By default, HD-BET will run in GPU mode, use the parameters of all five models (which originate from a five-fold 
 cross-validation), use test time data augmentation by mirroring along all axes and not do any postprocessing.
 
 For batch processing it is faster to process an entire folder at once as this will mitigate the overhead of loading 
@@ -62,9 +72,13 @@ we recommend you use the following command:
 ```bash
 hd-bet -i INPUT_FOLDER -o OUTPUT_FOLDER -device cpu -mode fast -tta 0
 ```
-(this works of course also with just an input file)
+This works of course also with just an input file:
 
-This will disable test time data augmentation (speedup of 8x) and use only one model instead of an ensemble of five models 
+```bash
+hd-bet -i INPUT_FILENAME -device cpu -mode fast -tta 0
+```
+
+The options *-mode fast* and *-tta 0* will disable test time data augmentation (speedup of 8x) and use only one model instead of an ensemble of five models 
 for the prediction.
 
 ### More options:
@@ -89,5 +103,5 @@ This depends on your MRI image size. Typical run times (preprocessing, postproce
  a couple of seconds for GPU and about 2 Minutes on CPU (using ```-tta 0 -mode fast```)
 
 
-
-<sup>1</sup>https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Orientation%20Explained
+<sup>1</sup>https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils
+<sup>2</sup>https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Orientation%20Explained

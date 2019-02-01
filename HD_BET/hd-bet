@@ -7,7 +7,9 @@ import HD_BET
 if __name__ == "__main__":
     print("\n########################")
     print("If you are using hd-bet, please cite the following paper:")
-    print("TODO uploading to arxiv today...")
+    print("Isensee F, Schell M, Tursunova I, Brugnara G, Bonekamp D, Neuberger U, Wick A, Schlemmer HP, Heiland S, Wick W,"
+           "Bendszus M, Maier-Hein KH, Kickingereder P. Automated brain extraction of multi-sequence MRI using artificial"
+           "neural networks. arXiv preprint arXiv:1901.11341, 2019.")
     print("########################\n")
 
     import argparse
