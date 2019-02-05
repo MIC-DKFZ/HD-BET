@@ -96,7 +96,6 @@ ENV/
 *.jpg
 *.jpeg
 .idea
-*.txt
 .idea/*
 *.png
 *.nii.gz

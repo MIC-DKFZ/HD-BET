@@ -1,0 +1,5 @@
+numpy>=1.14.5
+torch>=0.4.0
+scikit-image>=0.14.0
+SimpleITK
+-e git+https://github.com/MIC-DKFZ/batchgenerators#egg=batchgenerators
