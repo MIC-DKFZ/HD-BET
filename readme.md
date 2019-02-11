@@ -11,12 +11,19 @@ Bendszus M, Maier-Hein KH, Kickingereder P. *Automated brain extraction of multi
 neural networks*. arXiv preprint arXiv:1901.11341, 2019.
 
 Compared to other commonly used brain extraction tools, HD-BET has some significant advantages:
-- HD-BET can run independent brain extraction various different MRI sequences and is not restricted to precontrast 
-T1-weighted (T1-w) sequences! It was 
-trained with precontrast T1-w, postcontrast T1-w, T2-w and FLAIR sequences. Other MRI sequences may work as well (just 
-give it a try!)
-- It was designed to be robust with respect to brain tumors, lesions and resection cavities as well as different MRI scanner hardware and acquisition parameters.
-- It is very fast on GPU with <10s run time per MRI sequence. Even on CPU it is not slower than other commonly 
+- HD-BET was developed with MRI-data from a large multicentric clinical trial in adult brain tumor patients acquired 
+across 37 institutions in Europe and included a broad range of MR hardware and acquisition parameters, pathologies 
+or treatment-induced tissue alterations. We used 2/3 of data for training and validation and 1/3 for testing. 
+Moreover independent testing of HD-BET was performed in three public benchmark datasets (NFBS, LPBA40 and CC-359).
+- HD-BET was trained with precontrast T1-w, postcontrast T1-w, T2-w and FLAIR sequences. It can perform independent 
+brain extraction on various different MRI sequences and is not restricted to precontrast T1-weighted (T1-w) sequences.
+ Other MRI sequences may work as well (just give it a try!)
+- HD-BET was designed to be robust with respect to brain tumors, lesions and resection cavities as well as different 
+MRI scanner hardware and acquisition parameters.
+- HD-BET outperformed five publicly available brain extraction algorithms (FSL BET, AFNI 3DSkullStrip, Brainsuite BSE, 
+ROBEX and BEaST) across all datasets and yielded median improvements of +1.33 to +2.63 points for the DICE 
+coefficient and -0.80 to -2.75 mm for the Hausdorff distance (Bonferroni-adjusted p<0.001). 
+- HD-BET is very fast on GPU with <10s run time per MRI sequence. Even on CPU it is not slower than other commonly 
 used tools.
 
 ## Installation Instructions 
