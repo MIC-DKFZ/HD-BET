@@ -37,6 +37,7 @@ pip 20.0.2 from /home/fabian/dl_venv/lib/python3.6/site-packages/pip (python 3.6
 
 If it does not show python 3.X, you can try pip3. If that also does not work you probably need to install python3 first.
 
+Once python 3 and pip are set up correctly, run the following commands to install HD-BET:
 1) Clone this repository:
     ```bash
     git clone https://github.com/MIC-DKFZ/HD-BET
