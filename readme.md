@@ -27,6 +27,15 @@ coefficient and -0.80 to -2.75 mm for the Hausdorff distance (Bonferroni-adjuste
 used tools.
 
 ## Installation Instructions 
+Note that you need to have a python3 installation for HD-BET to work. Please also make sure to install HD-BET with the
+correct pip version (the one that is connected to python3). You can verify this using the `--version` command:
+
+```
+(dl_venv) fabian@Fabian:~$ pip --version
+pip 20.0.2 from /home/fabian/dl_venv/lib/python3.6/site-packages/pip (python 3.6)
+```
+
+If it does not show python 3.X, you can try pip3. If that also does not work you probably need to install python3 first.
 
 1) Clone this repository:
     ```bash
