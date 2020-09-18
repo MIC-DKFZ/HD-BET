@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(name='HD_BET',
       version='1.0',
@@ -16,6 +16,7 @@ setup(name='HD_BET',
       'SimpleITK'
       ],
       scripts=['HD_BET/hd-bet'],
+      packages=find_packages(include=['HD_BET']),
       classifiers=[
           'Intended Audience :: Science/Research',
           'Programming Language :: Python',
