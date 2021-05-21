@@ -47,7 +47,7 @@ Once python 3 and pip are set up correctly, run the following commands to instal
     cd HD-BET
     pip install -e .
     ```
-3) Per default, model parameters will be downloaded to ~/.hd-bet_params. If you wish to use a different folder, open 
+3) Per default, model parameters will be downloaded to ~/hd-bet_params. If you wish to use a different folder, open 
 HD_BET/paths.py in a text editor and modify ```folder_with_parameter_files```
 
 
