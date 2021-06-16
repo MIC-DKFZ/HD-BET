@@ -71,7 +71,7 @@ def postprocess_prediction(seg):
     # basically look for connected components and choose the largest one, delete everything else
     print("running postprocessing... ")
     mask = seg != 0
-    lbls = label(mask, 8)
+    lbls = label(mask, connectivity=mask.ndim)
     lbls_sizes = [np.sum(lbls == i) for i in np.unique(lbls)]
     largest_region = np.argmax(lbls_sizes[1:]) + 1
     seg[lbls != largest_region] = 0
