@@ -31,7 +31,7 @@ class BaseConfig(object):
     def __repr__(self):
         res = ""
         for v in vars(self):
-            if not v.startswith("__") and not v.startswith("_") and v is not 'dataset':
+            if not v.startswith("__") and not v.startswith("_") and v != 'dataset':
                 res += (v + ": " + str(self.__getattribute__(v)) + "\n")
         return res
 
