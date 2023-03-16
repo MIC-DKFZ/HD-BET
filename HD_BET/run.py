@@ -20,7 +20,7 @@ def apply_bet(img, bet, out_fname):
 
 
 def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.join(HD_BET.__path__[0], "config.py"), device=0,
-               postprocess=False, do_tta=True, keep_mask=True, overwrite=True):
+               threads=0, postprocess=False, do_tta=True, keep_mask=True, overwrite=True):
     """
 
     :param mri_fnames: str or list/tuple of str
@@ -34,6 +34,8 @@ def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.j
     CPU you may want to turn that off to speed things up
     :return:
     """
+
+    torch.set_num_threads(threads)
 
     list_of_param_files = []
 
