@@ -100,7 +100,7 @@ if __name__ == "__main__":
     max_cpu_count = multiprocessing.cpu_count()
     if threads == 0:
         threads = max_cpu_count
-    elif threads not in range(1, max_cpu_count):
+    elif threads not in range(1, max_cpu_count + 1):
         raise ValueError(f"Unknown value for threads: {threads}. Expected: value between 1 and maximum number of available threads ({max_cpu_count}) \
         Tip: A value of 0 will pick the maximum available number.")
 
