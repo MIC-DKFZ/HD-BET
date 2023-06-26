@@ -23,7 +23,7 @@ setup(name='HD_BET',
           'Intended Audience :: Science/Research',
           'Programming Language :: Python',
           'Topic :: Scientific/Engineering',
-          'Operating System :: Unix'
+          'Operating System :: Unix/Windows'
       ]
       )
 
