@@ -15,7 +15,9 @@ setup(name='HD_BET',
       'scikit-image',
       'SimpleITK'
       ],
-      scripts=['HD_BET/hd-bet'],
+      scripts=['HD_BET/hd-bet',
+              'HD_BET/hd-bet.cmd',
+              'HD_BET/hd-bet.py'],
       packages=find_packages(include=['HD_BET']),
       classifiers=[
           'Intended Audience :: Science/Research',
