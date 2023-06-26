@@ -1,4 +1,4 @@
-numpy>=1.14.5
+numpy>=1.14.5, <1.25.0
 torch>=0.4.0
 scikit-image>=0.14.0
 SimpleITK>=2.0.2
