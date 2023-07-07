@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='HD_BET',
-      version='1.1',
+      version='1.01',
       description='Tool for brain extraction',
       url='https://github.com/MIC-DKFZ/hd-bet',
       python_requires='>=3.5',
