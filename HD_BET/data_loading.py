@@ -84,7 +84,7 @@ def save_segmentation_nifti(segmentation, dct, out_fname, order=1):
                      bbox[2][0]:bbox[2][1]] = segmentation
     else:
         seg_old_size = segmentation
-    if np.any(np.array(seg_old_size) != np.array(dct['size'])[[2, 1, 0]]):
+    if np.any(np.array(seg_old_size.shape) != np.array(dct['size'])[[2, 1, 0]]):
         seg_old_spacing = resize_segmentation(seg_old_size, np.array(dct['size'])[[2, 1, 0]], order=order)
     else:
         seg_old_spacing = seg_old_size
