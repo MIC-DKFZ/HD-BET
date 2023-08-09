@@ -26,7 +26,14 @@ coefficient and -0.80 to -2.75 mm for the Hausdorff distance (Bonferroni-adjuste
 - HD-BET is very fast on GPU with <10s run time per MRI sequence. Even on CPU it is not slower than other commonly 
 used tools.
 
-## Installation Instructions 
+## Graphical user interface
+
+HD-BET is available with a convenient graphical user interface in [3D Slicer](https://www.slicer.org) via the [HDBrainExtraction](https://github.com/lassoan/SlicerHDBrainExtraction#hdbrainextraction) extension. It can be installed with a few clicks as described [here](https://github.com/lassoan/SlicerHDBrainExtraction#tutorial) (in this case it is *not needed* to follow the steps described in "Installation Instructions" section below).
+
+![Screenshot of HD-BET in 3D Slicer](https://github.com/lassoan/SlicerHDBrainExtraction/raw/main/Screenshot01.jpg)
+
+## Installation Instructions
+
 Note that you need to have a python3 installation for HD-BET to work. Please also make sure to install HD-BET with the
 correct pip version (the one that is connected to python3). You can verify this using the `--version` command:
 
