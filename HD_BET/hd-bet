@@ -46,6 +46,7 @@ if __name__ == "__main__":
     parser.add_argument('--overwrite_existing', default=1, type=int, required=False, help="set this to 0 if you don't "
                                                                                           "want to overwrite existing "
                                                                                           "predictions")
+    parser.add_argument('-b','--bet', default=1, type=int, required=False, help="set this to 0 if you don't want to save skull-stripped brain")
 
     args = parser.parse_args()
 
@@ -62,6 +63,7 @@ if __name__ == "__main__":
     pp = args.pp
     save_mask = args.save_mask
     overwrite_existing = args.overwrite_existing
+    bet = args.bet
 
     params_file = os.path.join(HD_BET.__path__[0], "model_final.py")
     config_file = os.path.join(HD_BET.__path__[0], "config.py")
@@ -116,6 +118,17 @@ if __name__ == "__main__":
     elif save_mask == 1:
         save_mask = True
     else:
-        raise ValueError("Unknown value for pp: %s. Expected: 0 or 1" % str(pp))
+        raise ValueError("Unknown value for save_mask: %s. Expected: 0 or 1" % str(save_mask))
 
-    run_hd_bet(input_files, output_files, mode, config_file, device, pp, tta, save_mask, overwrite_existing)
+    if bet == 0:
+        if save_mask:
+            bet = False
+        else:
+            print("Save_mask and bet are set to 0. In this case, Bet is set to 1.")
+            bet = True
+    elif bet == 1:
+        bet = True
+    else:
+        raise ValueError("Unknown value for bet: %s. Expected: 0 or 1" % str(pp))
+    
+    run_hd_bet(input_files, output_files, mode, config_file, device, pp, tta, save_mask, overwrite_existing, bet)
