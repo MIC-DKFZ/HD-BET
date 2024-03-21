@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='HD_BET',
-      version='1.0',
+      version='1.01',
       description='Tool for brain extraction',
       url='https://github.com/MIC-DKFZ/hd-bet',
       python_requires='>=3.5',
@@ -15,13 +15,15 @@ setup(name='HD_BET',
       'scikit-image',
       'SimpleITK'
       ],
-      scripts=['HD_BET/hd-bet'],
+      scripts=['HD_BET/hd-bet',
+              'HD_BET/hd-bet.cmd',
+              'HD_BET/hd-bet.py'],
       packages=find_packages(include=['HD_BET']),
       classifiers=[
           'Intended Audience :: Science/Research',
           'Programming Language :: Python',
           'Topic :: Scientific/Engineering',
-          'Operating System :: Unix'
+          'Operating System :: Unix/Windows'
       ]
       )
 
