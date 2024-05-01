@@ -75,7 +75,8 @@ def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.j
         params.append(torch.load(p, map_location=lambda storage, loc: storage))
 
     for in_fname, out_fname in zip(mri_fnames, output_fnames):
-        mask_fname = out_fname[:-7] + "_mask.nii.gz"
+        # mask_fname = out_fname[:-7] + "_mask.nii.gz" # If user doesn't include '.nii.gz' ext, this will cause issues
+        mask_fname = out_fname.replace('.nii.gz','') + '_mask.nii.gz' # this should work even if out_fname doesn't include .nii.gz ext
         if overwrite or (not (os.path.isfile(mask_fname) and keep_mask) or not os.path.isfile(out_fname)):
             print("File:", in_fname)
             print("preprocessing...")
