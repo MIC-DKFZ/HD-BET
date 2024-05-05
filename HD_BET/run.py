@@ -30,7 +30,7 @@ def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.j
     :param output_fnames: str or list/tuple of str. If list: must have the same length as output_fnames
     :param mode: fast or accurate
     :param config_file: config.py
-    :param device: either int (for device id) or 'cpu'
+    :param device: either int (for device id) or 'cpu' or 'mps'
     :param postprocess: whether to do postprocessing or not. Postprocessing here consists of simply discarding all
     but the largest predicted connected component. Default False
     :param do_tta: whether to do test time data augmentation by mirroring along all axes. Default: True. If you use
@@ -62,10 +62,13 @@ def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.j
     cf = cf_module.config()
 
     net, _ = cf.get_network(cf.val_use_train_mode, None)
-    if device == "cpu":
-        net = net.cpu()
+    
+    if device == 'cpu' or device == 'mps':
+        pass
     else:
-        net.cuda(device)
+        device = "cuda:" + device
+        
+    net = net.to(device)
 
     if not isinstance(mri_fnames, (list, tuple)):
         mri_fnames = [mri_fnames]
