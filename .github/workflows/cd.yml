@@ -1,0 +1,50 @@
+name: CD
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+  release:
+    types:
+      - published
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Many color libraries just need this to be set to any value, but at least
+  # one distinguishes color depth, where "3" -> "256-bit color".
+  FORCE_COLOR: 3
+
+jobs:
+  dist:
+    name: Distribution build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: hynek/build-and-inspect-python-package@v2
+
+  publish:
+    needs: [dist]
+    name: Publish to PyPI
+    environment: pypi
+    permissions:
+      id-token: write
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'published'
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: Packages
+          path: dist
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        if: github.event_name == 'release' && github.event.action == 'published'
