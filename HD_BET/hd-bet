@@ -130,5 +130,5 @@ if __name__ == "__main__":
         bet = True
     else:
         raise ValueError("Unknown value for bet: %s. Expected: 0 or 1" % str(pp))
-    
+
     run_hd_bet(input_files, output_files, mode, config_file, device, pp, tta, save_mask, overwrite_existing, bet)

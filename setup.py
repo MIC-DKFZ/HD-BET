@@ -24,4 +24,3 @@ setup(name='HD_BET',
           'Operating System :: Unix'
       ]
       )
-

@@ -118,4 +118,3 @@ class HD_BET_Config(BaseConfig):
 
 
 config = HD_BET_Config
-

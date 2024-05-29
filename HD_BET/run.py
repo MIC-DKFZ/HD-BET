@@ -113,5 +113,3 @@ def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.j
 
             if not keep_mask:
                 os.remove(mask_fname)
-
-
