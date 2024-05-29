@@ -6,7 +6,7 @@ from HD_BET.utils import maybe_mkdir_p, subfiles
 import HD_BET
 
 
-if __name__ == "__main__":
+def main():
     print("\n########################")
     print("If you are using hd-bet, please cite the following paper:")
     print("Isensee F, Schell M, Tursunova I, Brugnara G, Bonekamp D, Neuberger U, Wick A, Schlemmer HP, Heiland S, Wick W,"
@@ -132,3 +132,6 @@ if __name__ == "__main__":
         raise ValueError("Unknown value for bet: %s. Expected: 0 or 1" % str(pp))
 
     run_hd_bet(input_files, output_files, mode, config_file, device, pp, tta, save_mask, overwrite_existing, bet)
+
+if __name__ == "__main__":
+    main()
