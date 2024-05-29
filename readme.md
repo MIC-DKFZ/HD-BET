@@ -79,7 +79,7 @@ hd-bet -i INPUT_FILENAME
 ```
 
 INPUT_FILENAME must be a nifti (.nii.gz) file containing 3D MRI image data. 4D
-image sequences are not supported (however can be splitted upfront into the
+image sequences are not supported (however can be split upfront into the
 individual temporal volumes using fslsplit<sup>1</sup>). INPUT_FILENAME can be
 either a pre- or postcontrast T1-w, T2-w or FLAIR MRI sequence. Other modalities
 might work as well. Input images must match the orientation of standard MNI152

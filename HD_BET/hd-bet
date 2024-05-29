@@ -37,7 +37,7 @@ if __name__ == "__main__":
                                                                           '(mirroring). 1= True, 0=False. Disable this '
                                                                           'if you are using CPU to speed things up! '
                                                                           'Default: 1')
-    parser.add_argument('-pp', default=1, type=int, required=False, help='set to 0 to disabe postprocessing (remove all'
+    parser.add_argument('-pp', default=1, type=int, required=False, help='set to 0 to disable postprocessing (remove all'
                                                                          ' but the largest connected component in '
                                                                          'the prediction. Default: 1')
     parser.add_argument('-s', '--save_mask', default=1, type=int, required=False, help='if set to 0 the segmentation '
