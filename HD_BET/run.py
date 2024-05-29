@@ -1,12 +1,15 @@
-import torch
+import imp
+import os
+
 import numpy as np
 import SimpleITK as sitk
+import torch
+
+import HD_BET
 from HD_BET.data_loading import load_and_preprocess, save_segmentation_nifti
 from HD_BET.predict_case import predict_case_3D_net
-import imp
-from HD_BET.utils import postprocess_prediction, SetNetworkToVal, get_params_fname, maybe_download_parameters
-import os
-import HD_BET
+from HD_BET.utils import (SetNetworkToVal, get_params_fname,
+                          maybe_download_parameters, postprocess_prediction)
 
 
 def apply_bet(img, bet, out_fname):

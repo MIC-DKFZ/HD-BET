@@ -1,5 +1,5 @@
-import torch
 import numpy as np
+import torch
 
 
 def pad_patient_3D(patient, shape_must_be_divisible_by=16, min_size=None):

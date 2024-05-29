@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 import os
+
+import HD_BET
 from HD_BET.run import run_hd_bet
 from HD_BET.utils import maybe_mkdir_p, subfiles
-import HD_BET
 
 
 def main():
