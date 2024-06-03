@@ -1,5 +1,7 @@
 from setuptools import setup, find_packages
 
+requirements= open('requirements.txt').read().split()
+
 setup(name='HD_BET',
       version='1.0',
       description='Tool for brain extraction',
@@ -9,12 +11,7 @@ setup(name='HD_BET',
       author_email='f.isensee@dkfz.de',
       license='Apache 2.0',
       zip_safe=False,
-      install_requires=[
-      'numpy',
-      'torch>=0.4.1',
-      'scikit-image',
-      'SimpleITK'
-      ],
+      install_requires=requirements,
       scripts=['HD_BET/hd-bet'],
       packages=find_packages(include=['HD_BET']),
       classifiers=[
