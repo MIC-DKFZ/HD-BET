@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-requirements= open('requirements.txt').read().split()
+requirements= open('requirements.txt').read().split('\n')
 
 setup(name='HD_BET',
       version='1.0',
