@@ -20,7 +20,7 @@ def apply_bet(img, bet, out_fname):
 
 
 def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.join(HD_BET.__path__[0], "config.py"), device=0,
-               postprocess=False, do_tta=True, keep_mask=True, overwrite=True):
+               postprocess=False, do_tta=True, keep_mask=True, overwrite=True, bet=False):
     """
 
     :param mri_fnames: str or list/tuple of str
@@ -108,8 +108,8 @@ def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.j
 
             print("exporting segmentation...")
             save_segmentation_nifti(seg, data_dict, mask_fname)
-
-            apply_bet(in_fname, mask_fname, out_fname)
+            if bet:
+                apply_bet(in_fname, mask_fname, out_fname)
 
             if not keep_mask:
                 os.remove(mask_fname)

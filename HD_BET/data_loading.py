@@ -55,7 +55,7 @@ def load_and_preprocess(mri_file):
     return all_data, properties_dict
 
 
-def save_segmentation_nifti(segmentation, dct, out_fname, order=1):
+def save_segmentation_nifti(segmentation, dct, out_fname, order=1, dtype=np.uint8):
     '''
     segmentation must have the same spacing as the original nifti (for now). segmentation may have been cropped out
     of the original image
@@ -84,11 +84,11 @@ def save_segmentation_nifti(segmentation, dct, out_fname, order=1):
                      bbox[2][0]:bbox[2][1]] = segmentation
     else:
         seg_old_size = segmentation
-    if np.any(np.array(seg_old_size) != np.array(dct['size'])[[2, 1, 0]]):
+    if np.any([i != j for i, j in zip(np.array(seg_old_size), np.array(dct['size'])[[2, 1, 0]])]):
         seg_old_spacing = resize_segmentation(seg_old_size, np.array(dct['size'])[[2, 1, 0]], order=order)
     else:
         seg_old_spacing = seg_old_size
-    seg_resized_itk = sitk.GetImageFromArray(seg_old_spacing.astype(np.int32))
+    seg_resized_itk = sitk.GetImageFromArray(seg_old_spacing.astype(dtype))
     seg_resized_itk.SetSpacing(np.array(dct['spacing'])[[0, 1, 2]])
     seg_resized_itk.SetOrigin(dct['origin'])
     seg_resized_itk.SetDirection(dct['direction'])
