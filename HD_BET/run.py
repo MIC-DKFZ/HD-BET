@@ -66,7 +66,7 @@ def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.j
     if device == 'cpu' or device == 'mps':
         pass
     else:
-        device = "cuda:" + device
+        device = "cuda:" + str(device)
         
     net = net.to(device)
 
