@@ -1,4 +1,4 @@
-import imp
+import importlib.util
 import os
 
 import numpy as np
@@ -56,8 +56,10 @@ def run_hd_bet(mri_fnames, output_fnames, mode="accurate", config_file=os.path.j
 
     assert all([os.path.isfile(i) for i in list_of_param_files]), "Could not find parameter files"
 
-    cf = imp.load_source('cf', config_file)
-    cf = cf.config()
+    spec = importlib.util.spec_from_file_location('cf', config_file)
+    cf_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cf_module)
+    cf = cf_module.config()
 
     net, _ = cf.get_network(cf.val_use_train_mode, None)
     if device == "cpu":

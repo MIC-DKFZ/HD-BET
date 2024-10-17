@@ -1,0 +1,32 @@
+[project]
+name = "HD_BET"
+version = "1.0"
+description = "Tool for brain extraction"
+readme = "README.md"
+requires-python = ">=3.5"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "Fabian Isensee", email = "f.isensee@dkfz.de"}
+]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering",
+    "Operating System :: Unix"
+]
+urls = { "Homepage" = "https://github.com/MIC-DKFZ/hd-bet" }
+
+dependencies = [
+    "numpy",
+    "torch>=0.4.1",
+    "scikit-image",
+    "SimpleITK"
+]
+
+[project.scripts]
+"hd-bet" = "HD_BET.hd_bet_cli:main"
+
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
