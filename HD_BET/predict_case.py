@@ -59,7 +59,7 @@ def predict_case_3D_net(net, patient_data, do_mirroring, num_repeats, BATCH_SIZE
         if main_device == 'cpu':
             pass
         else:
-            a = a.cuda(main_device)
+            a = a.to(main_device)
 
         if do_mirroring:
             x = 8

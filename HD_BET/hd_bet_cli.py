@@ -30,9 +30,9 @@ def main():
                                                                     'accurate',
                         required=False)
     parser.add_argument('-device', default='0', type=str, help='used to set on which device the prediction will run. '
-                                                               'Must be either int or str. Use int for GPU id or '
-                                                               '\'cpu\' to run on CPU. When using CPU you should '
-                                                               'consider disabling tta. Default for -device is: 0',
+                                                               'Must be either int or str. Use int for GPU id, '
+                                                               '\'cpu\' to run on CPU or \'mps\' for Mac/MPS. When using CPU '
+                                                               'you should consider disabling tta. Default for -device is: 0',
                         required=False)
     parser.add_argument('-tta', default=1, required=False, type=int, help='whether to use test time data augmentation '
                                                                           '(mirroring). 1= True, 0=False. Disable this '
@@ -70,11 +70,6 @@ def main():
     config_file = os.path.join(HD_BET.__path__[0], "config.py")
 
     assert os.path.abspath(input_file_or_dir) != os.path.abspath(output_file_or_dir), "output must be different from input"
-
-    if device == 'cpu':
-        pass
-    else:
-        device = int(device)
 
     if os.path.isdir(input_file_or_dir):
         maybe_mkdir_p(output_file_or_dir)
