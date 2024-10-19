@@ -61,15 +61,15 @@ def hdbet_predict(
 
     # we first just predict the brain masks using the standard nnU-Net inference
     predictor.predict_from_files(
-        input_files,
+        [[i] for i in input_files],
         brain_mask_files,
         save_probabilities=False,
         overwrite=True,
-        num_processes_preprocessing=2,
-        num_processes_segmentation_export=2,
+        num_processes_preprocessing=4,
+        num_processes_segmentation_export=4,
         folder_with_segs_from_prev_stage=None,
         num_parts=1,
-        part_id=1
+        part_id=0
     )
 
     if compute_brain_extracted_image:

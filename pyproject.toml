@@ -25,7 +25,7 @@ dependencies = [
 ]
 
 [project.scripts]
-"hd-bet" = "HD_BET.hd_bet_cli:main"
+"hd_bet_v2" = "HD_BETv2.entry_point:main"
 
 
 [build-system]
