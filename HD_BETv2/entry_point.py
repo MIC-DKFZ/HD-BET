@@ -5,15 +5,15 @@ from HD_BETv2.hd_bet_prediction import get_hdbet_predictor, hdbet_predict
 def main():
     print("\n########################")
     print("If you are using hd-bet, please cite the following papers:\n")
-    print("Isensee F, Schell M, Tursunova I, Brugnara G, Bonekamp D, Neuberger U, Wick A, Schlemmer HP, Heiland S, Wick W,"
-           "Bendszus M, Maier-Hein KH, Kickingereder P. Automated brain extraction of multi-sequence MRI using artificial"
+    print("Isensee F, Schell M, Tursunova I, Brugnara G, Bonekamp D, Neuberger U, Wick A, Schlemmer HP, Heiland S, Wick W, "
+           "Bendszus M, Maier-Hein KH, Kickingereder P. Automated brain extraction of multi-sequence MRI using artificial "
            "neural networks. arXiv preprint arXiv:1901.11341, 2019.\n")
     print(
         "Isensee, F., Jaeger, P. F., Kohl, S. A., Petersen, J., & Maier-Hein, K. H. (2021). "
         "nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation. "
         "Nature methods, 18(2), 203-211.")
 
-    print("\n########################\n")
+    print("########################\n")
 
     import argparse
     parser = argparse.ArgumentParser()
