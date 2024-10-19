@@ -1,10 +1,13 @@
 import os.path
 from multiprocessing import Pool
-
+import sys
 import SimpleITK as sitk
 import torch
-from batchgenerators.utilities.file_and_folder_operations import nifti_files, join, maybe_mkdir_p
+from batchgenerators.utilities.file_and_folder_operations import nifti_files, join, maybe_mkdir_p, isdir
+
+sys.stdout = open(os.devnull, 'w')
 from nnunetv2.inference.predict_from_raw_data import nnUNetPredictor
+sys.stdout = sys.__stdout__
 from HD_BETv2.paths import folder_with_parameter_files
 
 
@@ -55,9 +58,11 @@ def hdbet_predict(
         output_files = [join(output_file_or_folder, os.path.basename(i)) for i in input_files]
         brain_mask_files = [i[:-7] + '_bet.nii.gz' for i in output_files]
     else:
-        input_files = input_file_or_folder
-        output_files = output_file_or_folder
-        brain_mask_files = output_file_or_folder[:-7] + '_bet.nii.gz'
+        assert not isdir(output_file_or_folder), 'If input is a single file then output must be a filename, not a directory'
+        assert output_file_or_folder.endswith('.nii.gz'), 'Output file must end with .nii.gz'
+        input_files = [input_file_or_folder]
+        output_files = [output_file_or_folder]
+        brain_mask_files = [output_file_or_folder[:-7] + '_bet.nii.gz']
 
     # we first just predict the brain masks using the standard nnU-Net inference
     predictor.predict_from_files(
@@ -66,11 +71,15 @@ def hdbet_predict(
         save_probabilities=False,
         overwrite=True,
         num_processes_preprocessing=4,
-        num_processes_segmentation_export=4,
+        num_processes_segmentation_export=8,
         folder_with_segs_from_prev_stage=None,
         num_parts=1,
         part_id=0
     )
+    # remove unnecessary json files
+    os.remove(join(os.path.dirname(brain_mask_files[0]), 'dataset.json'))
+    os.remove(join(os.path.dirname(brain_mask_files[0]), 'plans.json'))
+    os.remove(join(os.path.dirname(brain_mask_files[0]), 'predict_from_raw_data_args.json'))
 
     if compute_brain_extracted_image:
         # now brain extract the images
