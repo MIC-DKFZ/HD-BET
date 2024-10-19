@@ -1,9 +1,9 @@
 [project]
-name = "HD_BET"
-version = "1.1"
+name = "HD_BETv2"
+version = "2.0"
 description = "Tool for brain extraction"
 readme = "README.md"
-requires-python = ">=3.5"
+requires-python = ">=3.10"
 license = {text = "Apache-2.0"}
 authors = [
     {name = "Fabian Isensee", email = "f.isensee@dkfz.de"}
@@ -20,7 +20,8 @@ dependencies = [
     "numpy",
     "torch>=0.4.1",
     "scikit-image",
-    "SimpleITK"
+    "SimpleITK",
+    "nnunetv2>=2.5.1"
 ]
 
 [project.scripts]
