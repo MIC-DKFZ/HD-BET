@@ -8,7 +8,7 @@ from batchgenerators.utilities.file_and_folder_operations import nifti_files, jo
 sys.stdout = open(os.devnull, 'w')
 from nnunetv2.inference.predict_from_raw_data import nnUNetPredictor
 sys.stdout = sys.__stdout__
-from HD_BETv2.paths import folder_with_parameter_files
+from HD_BET.paths import folder_with_parameter_files
 
 
 def apply_bet(img, bet, out_fname):
@@ -40,6 +40,8 @@ def get_hdbet_predictor(
         folder_with_parameter_files,
         'all'
     )
+    if device == torch.device('cpu'):
+        torch.set_num_threads(os.cpu_count())
     return predictor
 
 

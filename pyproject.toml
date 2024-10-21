@@ -1,5 +1,5 @@
 [project]
-name = "HD_BETv2"
+name = "HD_BET"
 version = "2.0"
 description = "Tool for brain extraction"
 readme = "README.md"
@@ -25,7 +25,7 @@ dependencies = [
 ]
 
 [project.scripts]
-"hd_bet_v2" = "HD_BETv2.entry_point:main"
+"hd-bet" = "HD_BET.entry_point:main"
 
 
 [build-system]
