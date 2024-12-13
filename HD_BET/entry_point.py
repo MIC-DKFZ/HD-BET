@@ -1,5 +1,6 @@
 import torch
 
+from HD_BET.checkpoint_download import maybe_download_parameters
 from HD_BET.hd_bet_prediction import get_hdbet_predictor, hdbet_predict
 
 def main():
@@ -40,6 +41,8 @@ def main():
                         help="Talk to me.")
 
     args = parser.parse_args()
+
+    maybe_download_parameters()
 
     predictor = get_hdbet_predictor(
         use_tta=not args.disable_tta,

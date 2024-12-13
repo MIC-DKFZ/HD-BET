@@ -3,7 +3,7 @@ import zipfile
 from typing import Optional
 
 import requests
-from batchgenerators.utilities.file_and_folder_operations import isfile, join
+from batchgenerators.utilities.file_and_folder_operations import isfile, join, maybe_mkdir_p
 from tqdm import tqdm
 from HD_BET.paths import folder_with_parameter_files, ZENODO_DOWNLOAD_URL
 
@@ -26,6 +26,7 @@ def download_file(url: str, local_filename: str, chunk_size: Optional[int] = 819
 
 def maybe_download_parameters():
     if not isfile(join(folder_with_parameter_files, 'fold_all', 'checkpoint_final.pth')):
-        fname = download_file(ZENODO_DOWNLOAD_URL)
+        maybe_mkdir_p(folder_with_parameter_files)
+        fname = download_file(ZENODO_DOWNLOAD_URL, join(folder_with_parameter_files, os.pardir, 'tmp_download.zip'))
         install_model_from_zip_file(fname)
         os.remove(fname)

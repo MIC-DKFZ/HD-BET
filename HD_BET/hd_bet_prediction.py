@@ -4,7 +4,6 @@ import sys
 import SimpleITK as sitk
 import torch
 from batchgenerators.utilities.file_and_folder_operations import nifti_files, join, maybe_mkdir_p, isdir
-
 sys.stdout = open(os.devnull, 'w')
 from nnunetv2.inference.predict_from_raw_data import nnUNetPredictor
 sys.stdout = sys.__stdout__
