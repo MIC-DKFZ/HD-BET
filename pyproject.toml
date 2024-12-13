@@ -18,7 +18,7 @@ urls = { "Homepage" = "https://github.com/MIC-DKFZ/hd-bet" }
 
 dependencies = [
     "numpy",
-    "torch>=0.4.1",
+    "torch>=2.0.0",
     "scikit-image",
     "SimpleITK",
     "nnunetv2>=2.5.1"
