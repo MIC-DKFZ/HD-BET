@@ -42,17 +42,23 @@ Note that you need to have a python3 installation for HD-BET to work. Please
 also make sure to install HD-BET with the correct pip version (the one that is
 connected to python3). You can verify this using the `--version` command:
 
-```
-(dl_venv) fabian@Fabian:~$ pip --version
-pip 20.0.2 from /home/fabian/dl_venv/lib/python3.6/site-packages/pip (python 3.6)
+```bash
+(nnunetv2) isensee@FabianUbuntu:~/temp/hdbet$ pip --version
+pip 24.2 from /home/isensee/miniforge3/envs/nnunetv2/lib/python3.12/site-packages/pip (python 3.12)
 ```
 
 If it does not show python 3.X, you can try pip3. If that also does not work you
 probably need to install python3 first.
 
-Once python 3 and pip are set up correctly, run the following commands to
-install HD-BET:
+**Once python 3 and pip are set up correctly, run the following command to
+install HD-BET:**
 
+```bash
+pip install hd-bet
+```
+
+
+Alternatively you can install the current master by following these steps:
 1. Clone this repository:
    ```bash
    git clone https://github.com/MIC-DKFZ/HD-BET
@@ -75,7 +81,7 @@ preferred. Here is a minimalistic example of how you can use HD-BET (you need to
 be in the HD_BET directory)
 
 ```bash
-hd-bet -i INPUT_FILENAME
+hd-bet -i INPUT_FILENAME -o OUTPUT_FILENAME
 ```
 
 INPUT_FILENAME must be a nifti (.nii.gz) file containing 3D MRI image data. 4D
@@ -86,9 +92,8 @@ might work as well. Input images must match the orientation of standard MNI152
 template! Use fslreorient2std <sup>2</sup> upfront to ensure that this is the
 case.
 
-By default, HD-BET will run in GPU mode, use the parameters of all five models
-(which originate from a five-fold cross-validation), use test time data
-augmentation by mirroring along all axes and not do any postprocessing.
+By default, HD-BET will run in GPU mode and use test time data
+augmentation by mirroring along all axes.
 
 For batch processing it is faster to process an entire folder at once as this
 will mitigate the overhead of loading and initializing the model for each case:
@@ -107,18 +112,17 @@ need quite a bit of RAM. To run on CPU, we recommend you use the following
 command:
 
 ```bash
-hd-bet -i INPUT_FOLDER -o OUTPUT_FOLDER -device cpu -mode fast -tta 0
+hd-bet -i INPUT_FOLDER -o OUTPUT_FOLDER -device cpu --disable_tta
 ```
 
 This works of course also with just an input file:
 
 ```bash
-hd-bet -i INPUT_FILENAME -device cpu -mode fast -tta 0
+hd-bet -i INPUT_FILENAME -device cpu --disable_tta
 ```
 
-The options _-mode fast_ and _-tta 0_ will disable test time data augmentation
-(speedup of 8x) and use only one model instead of an ensemble of five models for
-the prediction.
+The option --disable_tta will disable test time data augmentation
+(speedup of 8x).
 
 ### More options:
 
@@ -138,12 +142,12 @@ hd-bet --help
    into out of memory problems please check the following: 1) Make sure the
    voxel spacing of your data is correct and 2) Ensure your MRI image only
    contains the head region
-2. **Will you provide the training code as well?** No. The training code is
-   tightly wound around the data which we cannot make public.
+2. **Will you provide the training code as well?** It's basically 
+[nnU-Net](https://github.com/MIC-DKFZ/nnUNet) since v2. We use nnUNetTrainerDA5 with minor (not yet published) modifications.
 3. **What run time can I expect on CPU/GPU?** This depends on your MRI image
-   size. Typical run times (preprocessing, postprocessing and resampling
+   size. Typical run times (preprocessing and resampling
    included) are just a couple of seconds for GPU and about 2 Minutes on CPU
-   (using `-tta 0 -mode fast`)
+   (using `--disable_tta`)
 
 <sup>1</sup>https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils
 
