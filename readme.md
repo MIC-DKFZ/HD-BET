@@ -63,9 +63,8 @@ Alternatively you can install the current master by following these steps:
    ```bash
    git clone https://github.com/MIC-DKFZ/HD-BET
    ```
-2. Go into the repository (the folder with the setup.py file) and install:
+2. Go into the repository (the folder with the pyproject.toml file) and install:
    ```
-   cd HD-BET
    pip install -e .
    ```
 3. Per default, model parameters will be downloaded to ~/hd-bet_params. If you
