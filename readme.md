@@ -8,10 +8,10 @@ Division of Medical Image Computing at the German Cancer Research Center (DKFZ).
 
 If you are using HD-BET, please cite the following publication:
 
-Isensee F, Schell M, Tursunova I, Brugnara G, Bonekamp D, Neuberger U, Wick A,
-Schlemmer HP, Heiland S, Wick W, Bendszus M, Maier-Hein KH, Kickingereder P.
-Automated brain extraction of multi-sequence MRI using artificial neural
-networks. Hum Brain Mapp. 2019; 1–13. https://doi.org/10.1002/hbm.24750
+    Isensee F, Schell M, Tursunova I, Brugnara G, Bonekamp D, Neuberger U, Wick A,
+    Schlemmer HP, Heiland S, Wick W, Bendszus M, Maier-Hein KH, Kickingereder P.
+    Automated brain extraction of multi-sequence MRI using artificial neural
+    networks. Hum Brain Mapp. 2019; 1–13. https://doi.org/10.1002/hbm.24750
 
 Compared to other commonly used brain extraction tools, HD-BET has some
 significant advantages:
