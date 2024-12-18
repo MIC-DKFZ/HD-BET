@@ -52,7 +52,7 @@ def hdbet_predict(
         compute_brain_extracted_image: bool = True
 ):
     # find input file or files
-    if os.path.isdir((input_file_or_folder)):
+    if os.path.isdir(input_file_or_folder):
         input_files = nifti_files(input_file_or_folder)
         # output_file_or_folder must be folder in this case
         maybe_mkdir_p(output_file_or_folder)
@@ -62,8 +62,8 @@ def hdbet_predict(
         assert not isdir(output_file_or_folder), 'If input is a single file then output must be a filename, not a directory'
         assert output_file_or_folder.endswith('.nii.gz'), 'Output file must end with .nii.gz'
         input_files = [input_file_or_folder]
-        output_files = [output_file_or_folder]
-        brain_mask_files = [output_file_or_folder[:-7] + '_bet.nii.gz']
+        output_files = [join(os.path.curdir, output_file_or_folder)]
+        brain_mask_files = [join(os.path.curdir, output_file_or_folder[:-7] + '_bet.nii.gz')]
 
     # we first just predict the brain masks using the standard nnU-Net inference
     predictor.predict_from_files(
