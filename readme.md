@@ -1,8 +1,9 @@
 # HD-BET
 
-This repository provides easy to use access to our recently published HD-BET
+This repository provides easy to use access to our HD-BET
 brain extraction tool. HD-BET is the result of a joint project between the
-Department of Neuroradiology at the Heidelberg University Hospital and the
+Department of Neuroradiology at the Heidelberg University Hospital, the Divison 
+for Computational Radiology & Clinical AI, University Hospital Bonn and the
 Division of Medical Image Computing at the German Cancer Research Center (DKFZ).
 
 If you are using HD-BET, please cite the following publication:
@@ -33,32 +34,22 @@ significant advantages:
   and yielded median improvements of +1.33 to +2.63 points for the DICE
   coefficient and -0.80 to -2.75 mm for the Hausdorff distance
   (Bonferroni-adjusted p<0.001).
-- HD-BET is very fast on GPU with <10s run time per MRI sequence. Even on CPU it
+- HD-BET is very fast on GPU with <5s run time per MRI sequence. Even on CPU it
   is not slower than other commonly used tools.
 
 ## Installation Instructions
 
-Note that you need to have a python3 installation for HD-BET to work. Please
-also make sure to install HD-BET with the correct pip version (the one that is
-connected to python3). You can verify this using the `--version` command:
+Note that you need to have a python3 installation for HD-BET to work. HD-BET was 
+extensively tested in Linux but should work on Windows and Mac as well!
 
-```bash
-(nnunetv2) isensee@FabianUbuntu:~/temp/hdbet$ pip --version
-pip 24.2 from /home/isensee/miniforge3/envs/nnunetv2/lib/python3.12/site-packages/pip (python 3.12)
-```
+We recommend installing HD-BET in a virtual environment.
 
-If it does not show python 3.X, you can try pip3. If that also does not work you
-probably need to install python3 first.
-
-**Once python 3 and pip are set up correctly, run the following command to
-install HD-BET:**
-
+**Install HD-BET either as a python package (recommended):**
 ```bash
 pip install hd-bet
 ```
 
-
-Alternatively you can install the current master by following these steps:
+**(Alternatively) install the most recent master from GitHub**
 1. Clone this repository:
    ```bash
    git clone https://github.com/MIC-DKFZ/HD-BET
@@ -74,11 +65,10 @@ Alternatively you can install the current master by following these steps:
 
 ## How to use it
 
-Using HD_BET is straightforward. You can use it in any terminal on your linux
-system. The hd-bet command was installed automatically. We provide CPU as well
-as GPU support. Running on GPU is a lot faster though and should always be
-preferred. Here is a minimalistic example of how you can use HD-BET (you need to
-be in the HD_BET directory)
+Using HD-BET is straightforward. You can use it in any terminal on your linux
+system. The hd-bet command was installed automatically. We provide GPU as well
+as MPS and CPU support. Running on GPU/MPS is a lot faster and should always be
+preferred. Here is a minimalistic example of how you can use HD-BET:
 
 ```bash
 hd-bet -i INPUT_FILENAME -o OUTPUT_FILENAME
@@ -87,8 +77,9 @@ hd-bet -i INPUT_FILENAME -o OUTPUT_FILENAME
 INPUT_FILENAME must be a nifti (.nii.gz) file containing 3D MRI image data. 4D
 image sequences are not supported (however can be split upfront into the
 individual temporal volumes using fslsplit<sup>1</sup>). INPUT_FILENAME can be
-either a pre- or postcontrast T1-w, T2-w or FLAIR MRI sequence. Other modalities
-might work as well. Input images must match the orientation of standard MNI152
+any MRI sequence. Pre-, postcontrast T1-w, T2-w and FLAIR were used for training 
+and should work best. Other sequences will most likely work as well. Input 
+images must match the orientation of standard MNI152
 template! Use fslreorient2std <sup>2</sup> upfront to ensure that this is the
 case.
 
@@ -124,27 +115,21 @@ hd-bet -i INPUT_FILENAME -device cpu --disable_tta
 The option --disable_tta will disable test time data augmentation
 (speedup of 8x).
 
+HD-BET should also run on mps, just specify `-device mps`
+
 ### More options:
 
 For more information, please refer to the help functionality:
 
 ```bash
-hd-bet --help
+hd-bet -h
 ```
 
 ## FAQ
-
-1. **How much GPU memory do I need to run HD-BET?** We ran all our experiments
-   on NVIDIA Titan X GPUs with 12 GB memory. For inference you will need less,
-   but since inference in implemented by exploiting the fully convolutional
-   nature of CNNs the amount of memory required depends on your image. Typical
-   image should run with less than 4 GB of GPU memory consumption. If you run
-   into out of memory problems please check the following: 1) Make sure the
-   voxel spacing of your data is correct and 2) Ensure your MRI image only
-   contains the head region
-2. **Will you provide the training code as well?** It's basically 
-[nnU-Net](https://github.com/MIC-DKFZ/nnUNet) since v2. We use nnUNetTrainerDA5 with minor (not yet published) modifications.
-3. **What run time can I expect on CPU/GPU?** This depends on your MRI image
+1. **Will you provide the training code?** It's basically 
+[nnU-Net](https://github.com/MIC-DKFZ/nnUNet) since HD-BET v2. We use 
+   nnUNetTrainerDA5 with minor (not yet published) modifications.
+2. **What run time can I expect on CPU/GPU?** This depends on your MRI image
    size. Typical run times (preprocessing and resampling
    included) are just a couple of seconds for GPU and about 2 Minutes on CPU
    (using `--disable_tta`)
