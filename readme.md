@@ -62,6 +62,24 @@ pip install hd-bet
    wish to use a different folder, open HD_BET/paths.py in a text editor and
    modify `folder_with_parameter_files`
 
+### Pretrained model weights
+
+The pretrained HD-BET weights are hosted on Zenodo:
+[https://zenodo.org/records/14445620](https://zenodo.org/records/14445620)
+(DOI: [10.5281/zenodo.14445620](https://doi.org/10.5281/zenodo.14445620)).
+
+They are downloaded automatically the first time you run `hd-bet`, so normally
+you don't need to do anything. If your machine has no internet access, download
+`release_v1.5.0.zip` from the Zenodo record manually and extract it into
+`folder_with_parameter_files` (default: `~/hd-bet_params/release_2.0.0`) so
+that `fold_all/checkpoint_final.pth` ends up directly inside that folder.
+(The archive is named v1.5.0 on Zenodo, but it is the release used by
+HD-BET v2.)
+
+The weights are licensed under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). If you use them,
+please cite the HD-BET publication above.
+
 ## How to use it
 
 Using HD-BET is straightforward. You can use it in any terminal on your linux
@@ -132,6 +150,13 @@ hd-bet -h
    size. Typical run times (preprocessing and resampling
    included) are just a couple of seconds for GPU and about 2 Minutes on CPU
    (using `--disable_tta`)
+
+## License
+
+The HD-BET source code in this repository is licensed under the Apache License
+2.0 (see [LICENSE](LICENSE)). The pretrained model weights
+([Zenodo record 14445620](https://zenodo.org/records/14445620)) are licensed
+separately under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 <sup>1</sup>https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils
 
