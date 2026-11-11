@@ -1,5 +1,5 @@
-import os
 import zipfile
+from tempfile import TemporaryDirectory
 from typing import Optional
 
 import requests
@@ -27,6 +27,6 @@ def download_file(url: str, local_filename: str, chunk_size: Optional[int] = 819
 def maybe_download_parameters():
     if not isfile(join(folder_with_parameter_files, 'fold_all', 'checkpoint_final.pth')):
         maybe_mkdir_p(folder_with_parameter_files)
-        fname = download_file(ZENODO_DOWNLOAD_URL, join(folder_with_parameter_files, os.pardir, 'tmp_download.zip'))
-        install_model_from_zip_file(fname)
-        os.remove(fname)
+        with TemporaryDirectory(dir=folder_with_parameter_files) as tmpdir:
+            fname = download_file(ZENODO_DOWNLOAD_URL, join(tmpdir, 'parameters.zip'))
+            install_model_from_zip_file(fname)
